@@ -1,11 +1,16 @@
 import "./FaceDetection.css";
 
-const FaceDetection = ({ imageUrl, box }) => {
+interface Props {
+  imageUrl: string;
+  box: object;
+}
+
+const FaceDetection: React.FC<Props> = ({ imageUrl, box }) => {
   return (
     <div className="center ma">
       <div className="absolute mt2">
         <img
-          id="inputimage"
+          id="inputImage"
           src={imageUrl}
           alt="Not Found!"
           width={600}
@@ -14,10 +19,10 @@ const FaceDetection = ({ imageUrl, box }) => {
         <div
           className="bounding-box"
           style={{
-            top: box.topRow,
-            right: box.rightCol,
-            bottom: box.bottomRow,
-            left: box.leftCol,
+            top: box?.topRow,
+            right: box?.rightCol,
+            bottom: box?.bottomRow,
+            left: box?.leftCol,
           }}
         ></div>
       </div>

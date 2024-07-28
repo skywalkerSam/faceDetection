@@ -1,21 +1,27 @@
+import React from "react";
 import "./ImageBox.css";
 
-const ImageBox = ({ onInputChange, onPictureSubmit }) => {
+interface Props {
+  onInputChange(): void;
+  onPictureSubmit(): void;
+}
+
+const ImageBox: React.FC<Props> = ({ onInputChange, onPictureSubmit }) => {
   return (
     <div>
-      <p className="f3 white-80 mt5">
-        {"Here you can detect faces in your pictures, Give it a try... :)"}
+      <p className="f4 white-80 mt5">
+        {"Here you can detect a face in Images, Give it a go..."}
       </p>
       <div className="center">
         <div className="center form pa4 br3 shadow-5">
           <input
-            className="w-100 f4 pa2 center br4 ba red b--red bg-transparent hover-green mr3"
+            className="urlBox w-100 bg-transparent pa2 br4 ba grow mt3 mb3"
             type="text"
-            placeholder="Enter Image URL..."
+            placeholder="Image URL"
             onChange={onInputChange}
           ></input>
           <button
-            className="w-30 grow f4 link ph3 pv2 dib bg-transparent red hover-green br4 ba b--green ml3"
+            className="buttonSubmit w-30 bg-transparent pa2 br4 ba grow mt3 mb3"
             onClick={onPictureSubmit}
           >
             {" "}
