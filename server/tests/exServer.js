@@ -35,16 +35,16 @@ const saltRounds = 10;
 //         {
 //             id: '0',
 //             name: 'sam',
-//             email: 'sam@abc.xyz',
-//             password: 'sam',
+//             email: '',
+//             password: '',
 //             joined: new Date(),
 //             entries: 0,
 //         },
 //         {
 //             id: '1',
 //             name: 'starboy',
-//             email: 'starboy@abc.xyz',
-//             // password: 'starboy',
+//             email: '',
+//             // password: '',
 //             joined: new Date(),
 //             entries: 0,
 //         }
@@ -53,12 +53,12 @@ const saltRounds = 10;
 //         {
 //             id: '0',
 //             hash: '',
-//             email: 'sam@abc.xyz',
+//             email: '',
 //         },
 //         {
 //             id: '1',
 //             hash: '',
-//             email: 'starboy@abc.xyz',
+//             email: '',
 //         }
 //     ]
 // }
