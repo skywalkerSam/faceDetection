@@ -1,5 +1,7 @@
 // Image Route Handlers
 import { ClarifaiStub, grpc } from "clarifai-nodejs-grpc";
+import dotenv from "dotenv";
+dotenv.config();
 
 const PAT = process.env.PAT;
 const USER_ID = process.env.USER_ID;
@@ -10,6 +12,7 @@ const MODEL_VERSION_ID = process.env.MODEL_VERSION_ID;
 export const detectFace = (req, res) => {
     // Clarifai API: gRPC 
     const IMAGE_URL = req.body.input;
+    console.log("\n...Incoming Request: " + IMAGE_URL + "\n")
     const stub = ClarifaiStub.grpc();
 
     // This will be used by every Clarifai endpoint call
@@ -40,7 +43,7 @@ export const detectFace = (req, res) => {
             }
 
             // Since we have one input, one output will exist here
-            const output = response.outputs[0];
+            const output = response.outputs[0].data.regions[0].region_info.bounding_box
 
             // console.log("Predicted concepts:");
             // for (const concept of output.data.concepts) {
@@ -52,34 +55,3 @@ export const detectFace = (req, res) => {
 
     );
 }
-
-export const handleImage = (req, res, db) => {
-    const { id } = req.body;
-    if (!id) {
-        return res.status(400).json("Invalid Form Submission...!");
-    }
-    db('users').where({ id })
-        .returning('entries')
-        .increment('entries', 1)
-        .then(entries => {
-            (entries.length) ? res.json(entries[0].entries)
-                : res.status(400).json("Entry not found...!");
-        })
-        .catch((error) => {
-            console.log(error)
-            res.status(400).json("Error updating entries...")
-        });
-}
-
-/* 
-Sample Images URLs:
-
-    - https://samples.clarifai.com/metro-north.jpg
-
-    - https://cdna.artstation.com/p/assets/images/images/072/167/834/large/eunice-ye-.jpg?1706752364
-
-    - https://cdna.artstation.com/p/assets/images/images/072/178/120/large/alex-gray-tbrender-camera-38.jpg?1706781629
-
-    - https://cdnb.artstation.com/p/assets/images/images/072/184/959/4k/hwng-edric-nguyen-tbrender-viewport-009.jpg?1706793715
-
-*/
