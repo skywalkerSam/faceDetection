@@ -46,10 +46,10 @@
 .card {
   padding: 2em;
 }
-
+/* 
 .read-the-docs {
   color: #888;
-}
+} */
 
 footer {
   position: fixed;
@@ -73,20 +73,20 @@ footer {
 }
 
 .urlBox {
-  color: skyblue;
+  color: cyan;
   border: 3px solid grey;
   outline: none;
 }
 
 .buttonSubmit {
-  color: skyblue;
+  color: cyan;
   border: 3px solid grey;
 }
 
 /* FaceDetection */
 .bounding-box {
   position: absolute;
-  box-shadow: 0 0 0 2px skyblue inset;
+  box-shadow: 0 0 0 2px cyan inset;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

@@ -1,47 +1,56 @@
-import { Input, Model } from "clarifai-nodejs";
+import { ClarifaiStub, grpc } from "clarifai-nodejs-grpc";
+import dotenv from "dotenv";
+dotenv.config();
+
+const PAT = process.env.PAT;
+const USER_ID = process.env.USER_ID;
+const APP_ID = process.env.APP_ID;
+const MODEL_ID = process.env.MODEL_ID;
+const MODEL_VERSION_ID = process.env.MODEL_VERSION_ID;
 
 export const detectFace = (req, res) => {
-  const input = Input.getInputFromUrl({
-    inputId: "test-image",
-    imageUrl: "https://samples.clarifai.com/celebrity.jpeg",
-  });
+    // Clarifai API: gRPC 
+    const IMAGE_URL = req.body.input;
+    console.log("\n...Incoming Request: " + IMAGE_URL + "\n")
+    const stub = ClarifaiStub.grpc();
 
-  const model = new Model({
-    authConfig: {
-      pat: process.env.CLARIFAI_PAT!,
-      userId: process.env.CLARIFAI_USER_ID!,
-      appId: process.env.CLARIFAI_APP_ID!,
-    },
-    modelId: "celebrity-face-recognition",
-  });
+    // This will be used by every Clarifai endpoint call
+    const metadata = new grpc.Metadata();
+    metadata.set("authorization", "Key " + PAT);
 
-  model
-    .predict({
-      inputs: [input],
-    })
-    .then((response) => {
-      const result = response?.[0].data?.conceptsList[0].name ?? "unrecognized";
-      console.log(result);
-    })
-    .catch(console.error);
-};
+    stub.PostModelOutputs(
+        {
+            user_app_id: {
+                "user_id": USER_ID,
+                "app_id": APP_ID
+            },
+            model_id: MODEL_ID,
+            version_id: MODEL_VERSION_ID, // This is optional. Defaults to the latest model version
+            inputs: [
+                { data: { image: { url: IMAGE_URL, allow_duplicate_url: true } } }
+            ]
+        },
+        metadata,
+        (err, response) => {
+            if (err) {
+                throw new Error(err);
+            }
 
-export const handleImage = (req, res, db) => {
-  const { id } = req.body;
-  if (!id) {
-    return res.status(400).json("Invalid Form Submission...!");
-  }
-  db("users")
-    .where({ id })
-    .returning("entries")
-    .increment("entries", 1)
-    .then((entries) => {
-      entries.length
-        ? res.json(entries[0].entries)
-        : res.status(400).json("Entry not found...!");
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json("Error updating entries...");
-    });
-};
+            if (response.status.code !== 10000) {
+                // console.log(IMAGE_URL)
+                throw new Error("Post model outputs failed, status: " + response.status.description);
+            }
+
+            // Since we have one input, one output will exist here
+            const output = response.outputs[0].data.regions[0].region_info.bounding_box
+
+            // console.log("Predicted concepts:");
+            // for (const concept of output.data.concepts) {
+            //     console.log(concept.name + " " + concept.value);
+            // }
+            // console.log(output)
+            return res.json(output)
+        }
+
+    );
+}

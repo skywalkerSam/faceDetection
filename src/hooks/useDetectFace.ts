@@ -1,6 +1,6 @@
 import { useState, useDebugValue } from "react";
 
-const serverUrl: string = "http://localhost:8080/detect";
+const serverUrl: string = "https://facedetection-server-dxrj.onrender.com/detect";
 
 interface apiResponse {
   top_row: number;
