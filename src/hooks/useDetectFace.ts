@@ -42,7 +42,7 @@ export default function useDetectFace() {
       console.log("Image URL: ", imageUrl);
   
       fetch(serverUrl, {
-        mode: 'no-cors',
+        // mode: 'no-cors',
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
