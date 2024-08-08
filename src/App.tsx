@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import React from "react";
 import reactLogo from "./assets/react.svg";
 import appLogo from "/favicon.svg";
 import PWABadge from "./PWABadge.tsx";
@@ -6,29 +6,11 @@ import "./App.css";
 import "tachyons";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import starboyLogo from "/logo.png";
+import useDetectFace from "./hooks/useDetectFace.ts";
 
-interface apiResponse {
-  image: object;
-  imageWidth: number;
-  imageHeight: number;
-}
+const App: React.FC = () => {
+  const { imageUrl, setImageUrl, faceBox, detect } = useDetectFace();
 
-const calculateFaceLocation = (data?: apiResponse) => {
-  // console.log('Clarifai Model Response:', data);
-  const clarifaiFaceDetect = data.data.regions[0].region_info.bounding_box;
-  const image = document.getElementById("inputimage");
-  const imageWidth = image?.width
-  const imageHeight = image?.height
-  // console.log(clarifaiFaceDetect, imageWidth, imageHeight)
-  return {
-    topRow: clarifaiFaceDetect.top_row * imageHeight,
-    leftCol: clarifaiFaceDetect.left_col * imageWidth,
-    rightCol: imageWidth - clarifaiFaceDetect.right_col * imageWidth,
-    bottomRow: imageHeight - clarifaiFaceDetect.bottom_row * imageHeight,
-  };
-};
-
-const App = () => {
   return (
     <>
       <ErrorBoundary>
@@ -41,17 +23,67 @@ const App = () => {
             <img src={starboyLogo} alt="Starboy Logo" className="starboyLogo" />
           </a>
         </div>
-        <footer className="white-80 mt6">
-          <div>
-            <a href="https://vitejs.dev" target="_blank">
-              <img src={appLogo} className="logo" alt="animalFarm logo" />
-            </a>
-            <a href="https://react.dev" target="_blank">
-              <img src={reactLogo} className="logo react" alt="React logo" />
-            </a>
+
+        {/* ImageBox */}
+        <div>
+          <p className="f4 white-80 mt5">
+            {"Here you can detect a face in Images, Give it a go..."}
+          </p>
+          <div className="center">
+            <div className="center form pa4 br3 shadow-5">
+              <input
+                className="urlBox w-100 bg-transparent pa2 br4 ba grow mt3 mb3"
+                type="text"
+                placeholder="Image URL"
+                onChange={(event) => {
+                  setImageUrl(event.target.value);
+                  // console.log(imageUrl);
+                }}
+              ></input>
+              <button
+                className="buttonSubmit w-30 bg-transparent pa2 br4 ba grow mt3 mb3"
+                onClick={detect}
+              >
+                Detect Face!
+              </button>
+              <br />
+            </div>
           </div>
-          <small>&copy; Copyright 2024, Starboy Inc.</small>
-        </footer>
+        </div>
+
+        {/* FaceDetection */}
+        <div className="center ma">
+          <div className="absolute mt2">
+            <img
+              className="image-container"
+              id="inputImage"
+              src={imageUrl}
+              // alt="Provide Image URL!"
+            />
+            <div
+              className="bounding-box"
+              style={{
+                top: faceBox?.topRow,
+                right: faceBox?.rightCol,
+                bottom: faceBox?.bottomRow,
+                left: faceBox?.leftCol,
+              }}
+            ></div>
+          </div>
+        </div>
+        <div>
+          <footer className="white-80 mt6 ml6">
+            <small>&copy; Copyright 12024, Starboy Inc.</small>
+            <div>
+              <a href="https://vitejs.dev" target="_blank">
+                <img src={appLogo} className="logo" alt="animalFarm logo" />
+              </a>
+              <a href="https://react.dev" target="_blank">
+                <img src={reactLogo} className="logo react" alt="React logo" />
+              </a>
+            </div>
+          </footer>
+        </div>
         <PWABadge></PWABadge>
       </ErrorBoundary>
     </>

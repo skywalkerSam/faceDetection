@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { detectFace } from "./controllers/faceDetection.ts";
+import { detectFace } from "./controllers/faceDetection.js";
 import dotenv from "dotenv";
 dotenv.config()
 

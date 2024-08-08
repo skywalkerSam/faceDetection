@@ -1,3 +1,4 @@
+// Image Route Handlers
 import { ClarifaiStub, grpc } from "clarifai-nodejs-grpc";
 import dotenv from "dotenv";
 dotenv.config();

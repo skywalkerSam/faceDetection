@@ -6,7 +6,7 @@
 }
 
 .starboyLogo {
-  height:21em;
+  height: 21em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
@@ -46,7 +46,65 @@
 .card {
   padding: 2em;
 }
-
+/* 
 .read-the-docs {
   color: #888;
+} */
+
+footer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  z-index: -1;
+  /* margin-top: 150px;  */
+}
+
+/* ImageBox */
+.form {
+  width: 700px;
+  /* background: rgb(146,245,238);
+  background: radial-gradient(circle, rgba(146,245,238,1) 0%, rgba(244,137,137,1) 100%); */
+  background-color: black;
+  border-radius: 15px;
+  padding: 5%;
+  margin-bottom: 3%;
+}
+
+.urlBox {
+  color: cyan;
+  border: 3px solid grey;
+  outline: none;
+}
+
+.buttonSubmit {
+  color: cyan;
+  border: 3px solid grey;
+}
+
+/* FaceDetection */
+.bounding-box {
+  position: absolute;
+  box-shadow: 0 0 0 2px cyan inset;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+#inputImage {
+  margin-top: 1%;
+  /* margin-left: 1%; */
+  /* margin-right: 1%; */
+  /* margin-bottom: auto; */
+  width: 700px;
+  border-radius: 15px;
+}
+
+.image-container {
+  position: auto;
+  z-index: 0;
+  margin-bottom: 150px;
 }
